@@ -42,7 +42,7 @@ elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
   set(CMAKE_MT "${SDKPATH}/bin/${SDK_VER}/x64/mt.exe")
 
 else()
-  message(FATAL_ERROR "You can not do ${PLATFORM} at all, CMake will exit.")
+  message(FATAL_ERROR "You can not do -DPLATFORM=${PLATFORM} at all, CMake will exit.")
 endif()
 
 if(DRIVER)
