@@ -45,50 +45,48 @@ else()
   message(FATAL_ERROR "You can not do ${PLATFORM} at all, CMake will exit.")
 endif()
 
-include_directories(SYSTEM
-"${VCPATH}/include;"
-"${VCPATH}/atlmfc/include;"
-)
 if(DRIVER)
-include_directories(SYSTEM
-"${SDKPATH}/Include/${SDK_VER}/km/crt;"
-"${SDKPATH}/Include/${SDK_VER}/shared;"
-"${SDKPATH}/Include/${SDK_VER}/km;"
-)
+  include_directories(SYSTEM
+    "${SDKPATH}/Include/${SDK_VER}/km/crt;"
+    "${SDKPATH}/Include/${SDK_VER}/shared;"
+    "${SDKPATH}/Include/${SDK_VER}/km;"
+  )
 else()
-include_directories(SYSTEM
-"${SDKPATH}/Include/${SDK_VER}/ucrt;"
-"${SDKPATH}/Include/${SDK_VER}/shared;"
-"${SDKPATH}/Include/${SDK_VER}/um;"
-)
+  include_directories(SYSTEM
+    "${VCPATH}/include;"
+    "${VCPATH}/atlmfc/include;"
+    "${SDKPATH}/Include/${SDK_VER}/ucrt;"
+    "${SDKPATH}/Include/${SDK_VER}/shared;"
+    "${SDKPATH}/Include/${SDK_VER}/um;"
+  )
 endif()
 
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
-if(DRIVER)
-link_directories(
-"${SDKPATH}/Lib/${SDK_VER}/km/x86;"
-)
-else()
-link_directories(
-"${VCPATH}/lib/x86;"
-"${VCPATH}/atlmfc/lib/x86;"
-"${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
-"${SDKPATH}/Lib/${SDK_VER}/um/x86;"
-)
-endif()
+  if(DRIVER)
+    link_directories(
+      "${SDKPATH}/Lib/${SDK_VER}/km/x86;"
+    )
+  else()
+    link_directories(
+      "${VCPATH}/lib/x86;"
+      "${VCPATH}/atlmfc/lib/x86;"
+      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
+      "${SDKPATH}/Lib/${SDK_VER}/um/x86;"
+    )
+  endif()
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
-if(DRIVER)
-link_directories(
-"${SDKPATH}/Lib/${SDK_VER}/km/x64;"
-)
-else()
-link_directories(
-"${VCPATH}/lib/x64;"
-"${VCPATH}/atlmfc/lib/x64;"
-"${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
-"${SDKPATH}/Lib/${SDK_VER}/um/x64;"
-)
-endif()
+  if(DRIVER)
+    link_directories(
+      "${SDKPATH}/Lib/${SDK_VER}/km/x64;"
+    )
+  else()
+    link_directories(
+      "${VCPATH}/lib/x64;"
+      "${VCPATH}/atlmfc/lib/x64;"
+      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
+      "${SDKPATH}/Lib/${SDK_VER}/um/x64;"
+    )
+  endif()
 endif()
 
 if(KERNEL)
