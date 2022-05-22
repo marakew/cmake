@@ -108,6 +108,12 @@ set(_FLAGS_DEBUG "/Zi")
 #set(_FLAGS_DEBUG "/Z7")
 set(_GR "/GR-") # RTTI - disable
 set(_GS "/GS-") # Buffer Security Check - disable
+#set(_FLAGS_ARCH "/arch:IA32")
+#set(_FLAGS_ARCH "/arch:SSE")
+#set(_FLAGS_ARCH "/arch:SSE2")
+#set(_FLAGS_ARCH "/arch:AVX")
+#set(_FLAGS_ARCH "/arch:AVX2")
+#set(_FLAGS_ARCH "/arch:AVX512")
 set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
 if(DRIVER)
