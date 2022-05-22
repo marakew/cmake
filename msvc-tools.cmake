@@ -149,6 +149,8 @@ if(DRIVER)
     set(CMAKE_${t}_LINKER_FLAGS_INIT "/DRIVER /ENTRY:\"DriverEntry\" /SUBSYSTEM:CONSOLE /NODEFAULTLIB" CACHE STRING "" FORCE)
   endforeach()
    set(CMAKE_EXECUTABLE_SUFFIX ".sys" CACHE STRING "" FORCE)
+   set_property(GLOBAL PROPERTY SUFFIX ".sys")
+   set_property(TARGET PROPERTY SUFFIX ".sys")
 endif()
 
 # Modules\Platform\Windows.cmake
