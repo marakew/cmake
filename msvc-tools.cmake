@@ -106,8 +106,8 @@ endif()
 
 set(_FLAGS_DEBUG "/Zi")
 #set(_FLAGS_DEBUG "/Z7")
-set(_GR "/GR-")
-set(_GS "/GS-")
+set(_GR "/GR-") # RTTI - disable
+set(_GS "/GS-") # Buffer Security Check - disable
 set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
 if(DRIVER)
