@@ -122,8 +122,8 @@ set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
 if(DRIVER)
   # specifies the __stdcall calling convention for all functions except C++ member functions
-  string(APPEND _FLAGS_CXX " /Gz")
-  string(APPEND _FLAGS_C " /Gz")
+  string(APPEND _FLAGS_CXX " /Gz /KERNEL") #/Zc:threadSafeInit- 
+  string(APPEND _FLAGS_C " /Gz /KERNEL") #/Zc:threadSafeInit- 
 endif()
 set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "${_FLAGS_DEBUG} /Ob0 /Od ${_FLAGS_C}" CACHE STRING "" FORCE)
@@ -151,6 +151,10 @@ if(DRIVER)
    set(CMAKE_EXECUTABLE_SUFFIX ".sys" CACHE STRING "" FORCE)
    set_property(GLOBAL PROPERTY SUFFIX ".sys")
    set_property(TARGET PROPERTY SUFFIX ".sys")
+
+   set(CMAKE_EXE_LINKER_FLAGS    "${CMAKE_EXE_LINKER_FLAGS} /MANIFEST:NO")
+   set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} /MANIFEST:NO")
+   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /MANIFEST:NO")
 endif()
 
 # Modules\Platform\Windows.cmake
