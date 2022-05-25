@@ -5,17 +5,17 @@
 if(_TOOLCHAIN_INCLUDED)
   return()
 endif(_TOOLCHAIN_INCLUDED)
-set(_TOOLCHAIN_INCLUDED true)
+set(_TOOLCHAIN_INCLUDED TRUE)
 
-#if(DRIVER)
-#set(CMAKE_C_COMPILER_WORKS TRUE)
-#endif()
-set(CMAKE_C_COMPILER_FORCED TRUE)
+if(DRIVER)
+set(CMAKE_C_COMPILER_WORKS TRUE)
+endif()
+#set(CMAKE_C_COMPILER_FORCED TRUE)
 #set(CMAKE_C_COMPILER_ID_RUN TRUE)
-#if(DRIVER)
-#set(CMAKE_CXX_COMPILER_WORKS TRUE)
-#endif()
-set(CMAKE_CXX_COMPILER_FORCED TRUE)
+if(DRIVER)
+set(CMAKE_CXX_COMPILER_WORKS TRUE)
+endif()
+#set(CMAKE_CXX_COMPILER_FORCED TRUE)
 #set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
 
 set(VC_VER "14.29.30133")
@@ -42,8 +42,8 @@ if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x64/nmake.exe")
-  #set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
-  set(CMAKE_C_COMPILER "L:/git_my/cmake/cl.bat")
+  set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
+#  set(CMAKE_C_COMPILER "L:/git_my/cmake/cl.bat")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x64/link.exe")
@@ -73,50 +73,50 @@ endif()
 
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
   if(DRIVER)
-#    link_directories(
-#      "${SDKPATH}/Lib/${SDK_VER}/km/x86;"
-#    )
-  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-	"${SDKPATH}/Lib/${SDK_VER}/km/x86;"
-	CACHE STRING "" FORCE)
+    link_directories(
+      "${SDKPATH}/Lib/${SDK_VER}/km/x86;"
+    )
+#  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
+#	"${SDKPATH}/Lib/${SDK_VER}/km/x86;"
+#	CACHE STRING "" FORCE)
   else()
-#    link_directories(
-#      "${VCPATH}/lib/x86;"
-#      "${VCPATH}/atlmfc/lib/x86;"
-#      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
-#      "${SDKPATH}/Lib/${SDK_VER}/um/x86;"
-#    )
-  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-	"${VCPATH}/lib/x86;"
-	"${VCPATH}/atlmfc/lib/x86;"
-	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
-	"${SDKPATH}/Lib/${SDK_VER}/um/x86;"
-	CACHE STRING "" FORCE)
+    link_directories(
+      "${VCPATH}/lib/x86;"
+      "${VCPATH}/atlmfc/lib/x86;"
+      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
+      "${SDKPATH}/Lib/${SDK_VER}/um/x86;"
+    )
+#  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
+#	"${VCPATH}/lib/x86;"
+#	"${VCPATH}/atlmfc/lib/x86;"
+#	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
+#	"${SDKPATH}/Lib/${SDK_VER}/um/x86;"
+#	CACHE STRING "" FORCE)
   endif()
-  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
+#  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
   if(DRIVER)
-#    link_directories(
-#      "${SDKPATH}/Lib/${SDK_VER}/km/x64;"
-#    )
-  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-	"${SDKPATH}/Lib/${SDK_VER}/km/x64;"
-	CACHE STRING "" FORCE)
+    link_directories(
+      "${SDKPATH}/Lib/${SDK_VER}/km/x64;"
+    )
+#  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
+#	"${SDKPATH}/Lib/${SDK_VER}/km/x64;"
+#	CACHE STRING "" FORCE)
   else()
-#    link_directories(
-#      "${VCPATH}/lib/x64;"
-#      "${VCPATH}/atlmfc/lib/x64;"
-#      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
-#      "${SDKPATH}/Lib/${SDK_VER}/um/x64;"
-#    )
-  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-	"${VCPATH}/lib/x64;"
-	"${VCPATH}/atlmfc/lib/x64;"
-	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
-	"${SDKPATH}/Lib/${SDK_VER}/um/x64;"
-	CACHE STRING "" FORCE)
+    link_directories(
+      "${VCPATH}/lib/x64;"
+      "${VCPATH}/atlmfc/lib/x64;"
+      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
+      "${SDKPATH}/Lib/${SDK_VER}/um/x64;"
+    )
+#  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
+#	"${VCPATH}/lib/x64;"
+#	"${VCPATH}/atlmfc/lib/x64;"
+#	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
+#	"${SDKPATH}/Lib/${SDK_VER}/um/x64;"
+#	CACHE STRING "" FORCE)
   endif()
-  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
+#  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
 endif()
 
 if(DRIVER)
@@ -191,18 +191,18 @@ endif()
 #set(CMAKE_C_COMPILER_ID_FLAGS " /link XXX")
 #set(CMAKE_CXX_COMPILER_ID_FLAGS " /link XXX")
 
-set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "marakew_c_imp_inc_dirs" CACHE STRING "" FORCE)
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "marakew_cxx_imp_inc_dirs" CACHE STRING "" FORCE)
-set(_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT "marakew_c_imp_inc_dirs1" CACHE STRING "" FORCE)
-set(_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT "marakew_cxx_imp_inc_dirs1" CACHE STRING "" FORCE)
+#set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "marakew_c_imp_inc_dirs" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "marakew_cxx_imp_inc_dirs" CACHE STRING "" FORCE)
+#set(_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT "marakew_c_imp_inc_dirs1" CACHE STRING "" FORCE)
+#set(_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT "marakew_cxx_imp_inc_dirs1" CACHE STRING "" FORCE)
 
 #libs
 
 #set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "marakew_c_imp_link_dirs" CACHE STRING "" FORCE)
 #set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "marakew_cxx_imp_link_dirs" CACHE STRING "" FORCE)
 
-set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "marakew_c_imp_link_libs" CACHE STRING "" FORCE)
-set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "marakew_cxx_imp_link_libs" CACHE STRING "" FORCE)
+#set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "marakew_c_imp_link_libs" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "marakew_cxx_imp_link_libs" CACHE STRING "" FORCE)
 
 set(CMAKE_C_COMPILER_ID_LINK_FLAGS_ALWAYS " /link " CACHE STRING "" FORCE)
 foreach(dir ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES})
