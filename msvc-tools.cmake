@@ -43,7 +43,6 @@ elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x64/nmake.exe")
   set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
-#  set(CMAKE_C_COMPILER "L:/git_my/cmake/cl.bat")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x64/link.exe")
