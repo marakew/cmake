@@ -18,10 +18,40 @@ endif()
 #set(CMAKE_CXX_COMPILER_FORCED TRUE)
 #set(CMAKE_CXX_COMPILER_ID_RUN TRUE)
 
-set(VC_VER "14.29.30133")
-set(VCPATH "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview/VC/Tools/MSVC/${VC_VER}")
-set(SDK_VER "10.0.18362.0")
+function(get_highest_version the_dir the_ver)
+  file(GLOB entries LIST_DIRECTORIES true RELATIVE "${the_dir}" "${the_dir}/[0-9.]*")
+  foreach(entry ${entries})
+    if(IS_DIRECTORY "${the_dir}/${entry}")
+      set(${the_ver} "${entry}" PARENT_SCOPE)
+    endif()
+  endforeach()
+endfunction()
+
+set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
+set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
+
+set(MSVC_VER "14.29.30133")
+if (NOT MSVC_VER)
+	get_highest_version("D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview/VC/Tools/MSVC" MSVC_VER)
+endif()
+set(VCPATH "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview/VC/Tools/MSVC/${MSVC_VER}")
+
+set(WINSDK_VER "10.0.18362.0")
+if (NOT WINSDK_VER)
+	get_highest_version("D:/Program Files (x86)/Windows Kits/10/Include" WINSDK_VER)
+endif()
 set(SDKPATH "D:/Program Files (x86)/Windows Kits/10")
+
+if (NOT MSVC_VER OR NOT WINSDK_VER)
+	message(SEND_ERROR "Must specify CMake variable MSVC_VER and WINSDK_VER")
+endif()
+
+set(ATLMFC_INCLUDE "${VCPATH}/atlmfc/include")
+set(ATLMFC_LIB     "${VCPATH}/atlmfc/lib")
+set(MSVC_INCLUDE   "${VCPATH}/include")
+set(MSVC_LIB       "${VCPATH}/lib")
+set(WINSDK_INCLUDE "${SDKPATH}/Include/${WINSDK_VER}")
+set(WINSDK_LIB     "${SDKPATH}/Lib/${WINSDK_VER}")
 
 #message("PLATFORM=${PLATFORM}")
 if (NOT DEFINED ENV{PLATFORM})
@@ -36,8 +66,8 @@ if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x86/ml.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x86/link.exe")
 
-  set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${SDK_VER}/x86/rc.exe")
-  set(CMAKE_MT "${SDKPATH}/bin/${SDK_VER}/x86/mt.exe")
+  set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${WINSDK_VER}/x86/rc.exe")
+  set(CMAKE_MT "${SDKPATH}/bin/${WINSDK_VER}/x86/mt.exe")
 
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
@@ -47,8 +77,8 @@ elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x64/link.exe")
 
-  set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${SDK_VER}/x64/rc.exe")
-  set(CMAKE_MT "${SDKPATH}/bin/${SDK_VER}/x64/mt.exe")
+  set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${WINSDK_VER}/x64/rc.exe")
+  set(CMAKE_MT "${SDKPATH}/bin/${WINSDK_VER}/x64/mt.exe")
 
 else()
   message(FATAL_ERROR "You can not do -DPLATFORM=${PLATFORM} at all, CMake will exit.")
@@ -56,63 +86,63 @@ endif()
 
 if(DRIVER)
   include_directories(SYSTEM
-    "${SDKPATH}/Include/${SDK_VER}/km/crt;"
-    "${SDKPATH}/Include/${SDK_VER}/shared;"
-    "${SDKPATH}/Include/${SDK_VER}/km;"
+    "${SDKPATH}/Include/${WINSDK_VER}/km/crt;"
+    "${SDKPATH}/Include/${WINSDK_VER}/shared;"
+    "${SDKPATH}/Include/${WINSDK_VER}/km;"
   )
 else()
   include_directories(SYSTEM
     "${VCPATH}/include;"
     "${VCPATH}/atlmfc/include;"
-    "${SDKPATH}/Include/${SDK_VER}/ucrt;"
-    "${SDKPATH}/Include/${SDK_VER}/shared;"
-    "${SDKPATH}/Include/${SDK_VER}/um;"
+    "${SDKPATH}/Include/${WINSDK_VER}/ucrt;"
+    "${SDKPATH}/Include/${WINSDK_VER}/shared;"
+    "${SDKPATH}/Include/${WINSDK_VER}/um;"
   )
 endif()
 
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
   if(DRIVER)
     link_directories(
-      "${SDKPATH}/Lib/${SDK_VER}/km/x86;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/km/x86;"
     )
 #  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-#	"${SDKPATH}/Lib/${SDK_VER}/km/x86;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/km/x86;"
 #	CACHE STRING "" FORCE)
   else()
     link_directories(
       "${VCPATH}/lib/x86;"
       "${VCPATH}/atlmfc/lib/x86;"
-      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
-      "${SDKPATH}/Lib/${SDK_VER}/um/x86;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/ucrt/x86;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/um/x86;"
     )
 #  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
 #	"${VCPATH}/lib/x86;"
 #	"${VCPATH}/atlmfc/lib/x86;"
-#	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x86;"
-#	"${SDKPATH}/Lib/${SDK_VER}/um/x86;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/ucrt/x86;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/um/x86;"
 #	CACHE STRING "" FORCE)
   endif()
 #  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
   if(DRIVER)
     link_directories(
-      "${SDKPATH}/Lib/${SDK_VER}/km/x64;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/km/x64;"
     )
 #  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
-#	"${SDKPATH}/Lib/${SDK_VER}/km/x64;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/km/x64;"
 #	CACHE STRING "" FORCE)
   else()
     link_directories(
       "${VCPATH}/lib/x64;"
       "${VCPATH}/atlmfc/lib/x64;"
-      "${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
-      "${SDKPATH}/Lib/${SDK_VER}/um/x64;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/ucrt/x64;"
+      "${SDKPATH}/Lib/${WINSDK_VER}/um/x64;"
     )
 #  set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES
 #	"${VCPATH}/lib/x64;"
 #	"${VCPATH}/atlmfc/lib/x64;"
-#	"${SDKPATH}/Lib/${SDK_VER}/ucrt/x64;"
-#	"${SDKPATH}/Lib/${SDK_VER}/um/x64;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/ucrt/x64;"
+#	"${SDKPATH}/Lib/${WINSDK_VER}/um/x64;"
 #	CACHE STRING "" FORCE)
   endif()
 #  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
