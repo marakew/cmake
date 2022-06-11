@@ -177,7 +177,8 @@ set(_GS "/GS-") # Buffer Security Check - disable
 #set(_FLAGS_ARCH "/arch:AVX512")
 set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
-set(_W3 " /W3")
+#set(_W3 " /W3")
+set(_W3 " /W4 /w14640")
 if(DRIVER)
   # specifies the __stdcall calling convention for all functions except C++ member functions
   string(APPEND _FLAGS_CXX " /Gz /KERNEL") #/Zc:threadSafeInit- 
