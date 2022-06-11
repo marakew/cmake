@@ -1,6 +1,8 @@
 # D:\Dev\cmake-3.22.1-windows-x86_64\bin\cmake.exe -G"NMake Makefiles" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Release .. -v > log 2>&1
 # D:\Dev\cmake-3.22.1-windows-x86_64\bin\cmake.exe --build . --target test -v
 # set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/msvc-tools.cmake)
+# for enable all langs by file extension
+# project(myproj CXX C ASM_MASM RC)
 
 if(_TOOLCHAIN_INCLUDED)
   return()
