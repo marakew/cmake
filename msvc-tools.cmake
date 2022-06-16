@@ -29,6 +29,9 @@ function(get_highest_version the_dir the_ver)
   endforeach()
 endfunction()
 
+set(CLANG_PATH "D:")
+set(CLANG_VER "14.0.5")
+
 set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
 set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
 
@@ -63,8 +66,13 @@ endif()
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x86/nmake.exe")
+if(USE_CLANG)
+  set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
+  set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
+else()
   set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x86/cl.exe")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x86/cl.exe")
+endif()
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x86/ml.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x86/link.exe")
 
@@ -74,8 +82,13 @@ if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x64/nmake.exe")
+if(USE_CLANG)
+  set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
+  set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
+else()
   set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
+endif()
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x64/link.exe")
 
