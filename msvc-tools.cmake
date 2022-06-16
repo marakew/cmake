@@ -226,8 +226,8 @@ string(APPEND _W3 " /w14826") # Conversion from 'type1' to 'type_2' is sign-exte
 string(APPEND _W3 " /w14905") # wide string literal cast to 'LPSTR'
 string(APPEND _W3 " /w14906") # string literal cast to 'LPWSTR'
 string(APPEND _W3 " /w14928") # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
-string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
 endif()
+string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
 
 if(DRIVER)
   # specifies the __stdcall calling convention for all functions except C++ member functions
