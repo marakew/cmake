@@ -66,7 +66,7 @@ endif()
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x86/nmake.exe")
-if(USE_CLANG)
+if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
 else()
@@ -82,7 +82,7 @@ endif()
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x64/nmake.exe")
-if(USE_CLANG)
+if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
 else()
@@ -171,12 +171,23 @@ else()
   set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ws2_32.lib" CACHE STRING "" FORCE)
 endif()
 
-# clang
-#set(_FLAGS_CXX " -frtti -fexceptions")
-#string(APPEND _FLAGS_CXX " -fno-strict-aliasing")
-#string(APPEND _FLAGS_CXX " -Wno-writable-strings")
-#string(APPEND _FLAGS_CXX " -Wno-microsoft-template")
-#string(APPEND _FLAGS_CXX " -Wno-deprecated-declarations")
+# clang-cl
+##string(APPEND _FLAGS_CXX " -fno-strict-aliasing")
+##string(APPEND _FLAGS_CXX " -Wno-writable-strings")
+##string(APPEND _FLAGS_CXX " -Wno-microsoft-template")
+##string(APPEND _FLAGS_CXX " -Wno-deprecated-declarations")
+
+#set(CMAKE_C_FLAGS "/DWIN32 -fms-extensions -fms-compatibility -D_WINDOWS${_Wall}" CACHE STRING "" FORCE)
+#set(CMAKE_C_FLAGS_DEBUG "${_FLAGS_DEBUG} -gline-tables-only -fno-inline -O0 ${_FLAGS_C}" CACHE STRING "" FORCE)
+#set(CMAKE_C_FLAGS_RELEASE "-O2 ${_FLAGS_C}" CACHE STRING "" FORCE)
+#set(CMAKE_C_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -gline-tables-only -O2 -fno-inline ${_FLAGS_C}" CACHE STRING "" FORCE)
+#set(CMAKE_C_FLAGS_MINSIZEREL "${_FLAGS_C}" CACHE STRING "" FORCE)
+
+#set(CMAKE_CXX_FLAGS "/DWIN32 -fms-extensions -fms-compatibility -D_WINDOWS${_Wall}" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_FLAGS_DEBUG "${_FLAGS_DEBUG} -gline-tables-only -fno-inline -O0 ${_FLAGS_CXX}" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_FLAGS_RELEASE "-O2 ${_FLAGS_CXX}" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -gline-tables-only -O2 -fno-inline ${_FLAGS_CXX}" CACHE STRING "" FORCE)
+#set(CMAKE_CXX_FLAGS_MINSIZEREL "${_FLAGS_CXX}" CACHE STRING "" FORCE)
 
 set(_FLAGS_DEBUG "/Zi")
 #set(_FLAGS_DEBUG "/Z7")
@@ -193,6 +204,7 @@ set(_FLAGS_C "")
 #set(_W3 " /W3")
 set(_W3 "")
 string(APPEND _W3 " /W4") # Baseline reasonable warnings
+if(NOT USE_CLANGCL)
 string(APPEND _W3 " /w14242") # 'identifier': conversion from 'type1' to 'type1', possible loss of data
 string(APPEND _W3 " /w14254") # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
 string(APPEND _W3 " /w14263") # 'function': member function does not override any base class virtual member function
@@ -215,19 +227,25 @@ string(APPEND _W3 " /w14905") # wide string literal cast to 'LPSTR'
 string(APPEND _W3 " /w14906") # string literal cast to 'LPWSTR'
 string(APPEND _W3 " /w14928") # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
 string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
+endif()
 
 if(DRIVER)
   # specifies the __stdcall calling convention for all functions except C++ member functions
   string(APPEND _FLAGS_CXX " /Gz /KERNEL") #/Zc:threadSafeInit- 
   string(APPEND _FLAGS_C " /Gz /KERNEL") #/Zc:threadSafeInit- 
 endif()
-set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS${_W3}" CACHE STRING "" FORCE)
+
+set(PLATFORM_COMPAT)
+if(USE_CLANGCL)
+string(APPEND PLATFORM_COMPAT " -fms-extensions -fms-compatibility")
+endif()
+set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS${PLATFORM_COMPAT}${_W3}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "${_FLAGS_DEBUG} /Ob0 /Od ${_FLAGS_C}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE "/O2 /Ob2 ${_FLAGS_C}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} /O2 /Ob1 ${_FLAGS_C}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_MINSIZEREL "/O1 /Ob1 ${_FLAGS_C}" CACHE STRING "" FORCE)
 
-set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS${_W3}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "/DWIN32 /D_WINDOWS${PLATFORM_COMPAT}${_W3}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_DEBUG "${_FLAGS_DEBUG} /Ob0 /Od ${_FLAGS_CXX}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_RELEASE "/O2 /Ob2 ${_FLAGS_CXX}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} /O2 /Ob1 ${_FLAGS_CXX}" CACHE STRING "" FORCE)
