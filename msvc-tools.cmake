@@ -30,7 +30,7 @@ function(get_highest_version the_dir the_ver)
 endfunction()
 
 set(CLANG_PATH "D:")
-set(CLANG_VER "14.0.5")
+set(CLANG_VER "15.0.3")
 
 set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
 set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
