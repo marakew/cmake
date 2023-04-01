@@ -30,22 +30,26 @@ function(get_highest_version the_dir the_ver)
 endfunction()
 
 set(CLANG_PATH "D:")
-set(CLANG_VER "15.0.3")
+set(CLANG_VER "16.0.0")
+
+#set(WINVCROOT "D:/Program Files/Microsoft Visual Studio/2022/EnterprisePreview")
+#set(MSVC_VER "14.36.32323")
 
 set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
-set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
-
 set(MSVC_VER "14.29.30133")
-if (NOT MSVC_VER)
-	get_highest_version("D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview/VC/Tools/MSVC" MSVC_VER)
-endif()
-set(VCPATH "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview/VC/Tools/MSVC/${MSVC_VER}")
 
+set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
 set(WINSDK_VER "10.0.18362.0")
-if (NOT WINSDK_VER)
-	get_highest_version("D:/Program Files (x86)/Windows Kits/10/Include" WINSDK_VER)
+
+if (NOT MSVC_VER)
+	get_highest_version("${WINVCROOT}/VC/Tools/MSVC" MSVC_VER)
 endif()
-set(SDKPATH "D:/Program Files (x86)/Windows Kits/10")
+set(VCPATH "${WINVCROOT}/VC/Tools/MSVC/${MSVC_VER}")
+
+if (NOT WINSDK_VER)
+	get_highest_version("${WINSDKROOT}/Include" WINSDK_VER)
+endif()
+set(SDKPATH "${WINSDKROOT}")
 
 if (NOT MSVC_VER OR NOT WINSDK_VER)
 	message(SEND_ERROR "Must specify CMake variable MSVC_VER and WINSDK_VER")
