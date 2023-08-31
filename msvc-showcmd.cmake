@@ -14,7 +14,7 @@
 
 # append after project()
 
-if (CMAKE_GENERATOR MATCHES "NMake Makefiles")
+if(CMAKE_GENERATOR MATCHES "NMake Makefiles")
 
 set(CMAKE_CXX_USE_RESPONSE_FILE_FOR_INCLUDES 0 FORCE)
 foreach(lang IN ITEMS C CXX)
