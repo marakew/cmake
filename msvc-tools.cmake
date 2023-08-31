@@ -1,4 +1,5 @@
 # D:\Dev\cmake-3.22.1-windows-x86_64\bin\cmake.exe -G"NMake Makefiles" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Release .. -v > log 2>&1
+# D:\Dev\cmake-3.27.4-windows-x86_64\bin\cmake.exe -G"Ninja" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Release .. -v > log 2>&1
 # D:\Dev\cmake-3.22.1-windows-x86_64\bin\cmake.exe --build . --target test -v
 # set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/msvc-tools.cmake)
 # for enable all langs by file extension
@@ -29,29 +30,45 @@ function(get_highest_version the_dir the_ver)
   endforeach()
 endfunction()
 
-set(CLANG_PATH "D:")
-set(CLANG_VER "16.0.0")
+if (NOT NINJA_PATH)
+   set(NINJA_PATH "D:/Dev")
+endif()
+
+if(NOT CLANG_PATH)
+   set(CLANG_PATH "D:")
+endif()
+if(NOT CLANG_VER)
+   set(CLANG_VER "16.0.0")
+endif()
 
 #set(WINVCROOT "D:/Program Files/Microsoft Visual Studio/2022/EnterprisePreview")
-#set(MSVC_VER "14.36.32323")
+#set(MSVC_VER "14.36.32522")
 
-set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
-set(MSVC_VER "14.29.30133")
+if(NOT WINVCROOT)
+   set(WINVCROOT "D:/Program Files (x86)/Microsoft Visual Studio/2019/EnterprisePreview")
+endif()
+if(NOT MSVC_VER)
+   set(MSVC_VER "14.29.30133")
+endif()
 
-set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
-set(WINSDK_VER "10.0.18362.0")
+if(NOT WINSDKROOT)
+   set(WINSDKROOT "D:/Program Files (x86)/Windows Kits/10")
+endif()
+if(NOT WINSDK_VER)
+   set(WINSDK_VER "10.0.18362.0")
+endif()
 
-if (NOT MSVC_VER)
+if(NOT MSVC_VER)
 	get_highest_version("${WINVCROOT}/VC/Tools/MSVC" MSVC_VER)
 endif()
 set(VCPATH "${WINVCROOT}/VC/Tools/MSVC/${MSVC_VER}")
 
-if (NOT WINSDK_VER)
+if(NOT WINSDK_VER)
 	get_highest_version("${WINSDKROOT}/Include" WINSDK_VER)
 endif()
 set(SDKPATH "${WINSDKROOT}")
 
-if (NOT MSVC_VER OR NOT WINSDK_VER)
+if(NOT MSVC_VER OR NOT WINSDK_VER)
 	message(SEND_ERROR "Must specify CMake variable MSVC_VER and WINSDK_VER")
 endif()
 
@@ -63,13 +80,18 @@ set(WINSDK_INCLUDE "${SDKPATH}/Include/${WINSDK_VER}")
 set(WINSDK_LIB     "${SDKPATH}/Lib/${WINSDK_VER}")
 
 #message("PLATFORM=${PLATFORM}")
-if (NOT DEFINED ENV{PLATFORM})
+if(NOT DEFINED ENV{PLATFORM})
     set(ENV{PLATFORM} ${PLATFORM})
 endif()
 
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
 
+if(CMAKE_GENERATOR MATCHES "Ninja")
+  set(CMAKE_MAKE_PROGRAM "${NINJA_PATH}/ninja.exe" CACHE FILEPATH "" FORCE)
+else()
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x86/nmake.exe")
+endif()
+
 if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
@@ -85,7 +107,12 @@ endif()
 
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
+if(CMAKE_GENERATOR MATCHES "Ninja")
+  set(CMAKE_MAKE_PROGRAM "${NINJA_PATH}/ninja.exe" CACHE FILEPATH "" FORCE)
+else()
   set(CMAKE_MAKE_PROGRAM "${VCPATH}/bin/Hostx64/x64/nmake.exe")
+endif()
+
 if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
