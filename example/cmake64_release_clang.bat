@@ -1,0 +1,1 @@
+cmake.bat -G"NMake Makefiles" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Release -Bbuild . -DPLATFORM=x64 -DUSE_CLANG=1 > build64_release.log 2>&1

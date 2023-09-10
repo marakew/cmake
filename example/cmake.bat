@@ -1,0 +1,1 @@
+"D:\Dev\cmake-3.25.1-windows-x86_64\bin\cmake.exe" %*

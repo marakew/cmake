@@ -1,0 +1,1 @@
+cmake.bat --build build --target clean -v > cclean.log 2>&1
