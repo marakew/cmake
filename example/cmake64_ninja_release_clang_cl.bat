@@ -1,1 +1,1 @@
-cmake.bat -G"Ninja" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Release -Bbuild . -DPLATFORM=x64 -DUSE_CLANGCL=1 > build64_release.log 2>&1
+cmake_dir.bat -G"Ninja" -DCMAKE_BUILD_TYPE=Release -DPLATFORM=x64 -DUSE_CLANGCL=1 > build64_release.log 2>&1

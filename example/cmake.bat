@@ -1,1 +1,1 @@
-"D:\Dev\cmake-3.25.1-windows-x86_64\bin\cmake.exe" %*
+"D:\Dev\cmake-3.27.4-windows-x86_64\bin\cmake.exe" %*

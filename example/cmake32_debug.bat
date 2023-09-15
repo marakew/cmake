@@ -1,1 +1,1 @@
-cmake.bat -G"NMake Makefiles" --debug-output --trace --trace-expand --debug-trycompile -DCMAKE_BUILD_TYPE=Debug -Bbuild . -DPLATFORM=x32 > build32_debug.log 2>&1
+cmake_dir.bat -G"NMake Makefiles" -DCMAKE_BUILD_TYPE=Debug -DPLATFORM=x32 > build32_debug.log 2>&1
