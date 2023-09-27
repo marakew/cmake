@@ -219,6 +219,7 @@ else()
     "${SDKPATH}/Include/${WINSDK_VER}/ucrt;"
     "${SDKPATH}/Include/${WINSDK_VER}/shared;"
     "${SDKPATH}/Include/${WINSDK_VER}/um;"
+    "${SDKPATH}/Include/${WINSDK_VER}/winrt;"
   )
 endif()
 
