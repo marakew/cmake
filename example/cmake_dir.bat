@@ -1,1 +1,1 @@
-cmake.bat -Bbuild . --debug-output --trace --trace-expand --debug-trycompile %*
+cmake.bat -Bbuild .. --debug-output --trace --trace-expand --debug-trycompile %*
