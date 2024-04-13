@@ -73,7 +73,7 @@ if(NOT DEFINED ENV{CLANG_VER})
 	if(CLANG_VER)
 		set(ENV{CLANG_VER} ${CLANG_VER})
 	else(NOT CLANG_VER)
-		set(CLANG_VER "17.0.x")
+		set(CLANG_VER "18.x.x")
 		set(ENV{CLANG_VER} ${CLANG_VER})
 	endif()
 else()
@@ -340,6 +340,85 @@ string(APPEND _W3 " /w14906") # string literal cast to 'LPWSTR'
 string(APPEND _W3 " /w14928") # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
 endif()
 string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
+if(USE_CLANG OR USE_CLANGCL)
+string(APPEND _W3 " -Wall")
+string(APPEND _W3 " -Wextra") # reasonable and standard
+string(APPEND _W3 " -Wshadow") # warn the user if a variable declaration shadows one from a parent context
+string(APPEND _W3 " -Wnon-virtual-dtor") # warn the user if a class with virtual functions has a non-virtual destructor. This helps
+					# catch hard to track down memory errors
+#string(APPEND _W3 " -Wold-style-cast") # warn for c-style casts
+#string(APPEND _W3 " -Wcast-align") # warn for potential performance problem casts
+string(APPEND _W3 " -Wunused") # warn on anything being unused
+string(APPEND _W3 " -Woverloaded-virtual") # warn if you overload (not override) a virtual function
+string(APPEND _W3 " -Wpedantic") # warn if non-standard C++ is used
+string(APPEND _W3 " -Wconversion") # warn on type conversions that may lose data
+string(APPEND _W3 " -Wsign-conversion") # warn on sign conversions
+string(APPEND _W3 " -Wnull-dereference") # warn if a null dereference is detected
+#string(APPEND _W3 " -Wdouble-promotion") # warn if float is implicit promoted to double
+string(APPEND _W3 " -Wformat=2") # warn on security issues around functions that format output (ie printf)
+string(APPEND _W3 " -Wno-unsafe-buffer-usage") #-fsafe-buffer-usage-suggestions
+string(APPEND _W3 " -Wno-documentation")
+string(APPEND _W3 " -Wno-documentation-unknown-command")
+string(APPEND _W3 " -Wno-nonportable-system-include-path")
+string(APPEND _W3 " -Wno-extra-semi-stmt")
+string(APPEND _W3 " -Wno-extra-semi")
+string(APPEND _W3 " -Wno-undef")
+string(APPEND _W3 " -Wno-comma")
+string(APPEND _W3 " -Wno-c++98-compat")
+string(APPEND _W3 " -Wno-c++98-compat-pedantic")
+string(APPEND _W3 " -Wno-unused-macros")
+string(APPEND _W3 " -Wno-old-style-cast")
+string(APPEND _W3 " -Wno-newline-eof")
+string(APPEND _W3 " -Wno-reserved-macro-identifier")
+string(APPEND _W3 " -Wno-zero-as-null-pointer-constant") # 0,NULL -> nullptr
+string(APPEND _W3 " -Wno-language-extension-token")
+string(APPEND _W3 " -Wno-reserved-identifier")
+string(APPEND _W3 " -Wno-missing-variable-declarations")
+string(APPEND _W3 " -Wno-declaration-after-statement")
+string(APPEND _W3 " -Wno-gnu-anonymous-struct")
+string(APPEND _W3 " -Wno-nested-anon-types")
+string(APPEND _W3 " -Wno-global-constructors")
+string(APPEND _W3 " -Wno-shadow-field")
+string(APPEND _W3 " -Wno-shadow-field-in-constructor")
+string(APPEND _W3 " -Wno-exit-time-destructors")
+string(APPEND _W3 " -Wno-used-but-marked-unused")
+string(APPEND _W3 " -Wno-four-char-constants")
+string(APPEND _W3 " -Wno-sign-conversion")
+#string(APPEND _W3 " -Wno-sign-compare")
+string(APPEND _W3 " -Wno-implicit-int-float-conversion")
+string(APPEND _W3 " -Wno-redundant-parens")
+string(APPEND _W3 " -Wno-deprecated-redundant-constexpr-static-def")
+string(APPEND _W3 " -Wno-suggest-destructor-override")
+string(APPEND _W3 " -Wno-double-promotion")
+string(APPEND _W3 " -Wno-implicit-float-conversion")
+string(APPEND _W3 " -Wno-float-conversion")
+string(APPEND _W3 " -Wno-cast-align")
+string(APPEND _W3 " -Wno-cast-qual")
+string(APPEND _W3 " -Wno-disabled-macro-expansion")
+string(APPEND _W3 " -Wno-gnu-zero-variadic-macro-arguments")
+string(APPEND _W3 " -Wno-microsoft-include")
+string(APPEND _W3 " -Wno-microsoft-cpp-macro")
+string(APPEND _W3 " -Wno-cast-function-type-strict")
+string(APPEND _W3 " -Wno-cast-function-type")
+string(APPEND _W3 " -Wno-missing-prototypes")
+string(APPEND _W3 " -Wno-missing-noreturn")
+string(APPEND _W3 " -Wno-inconsistent-missing-destructor-override")
+#string(APPEND _W3 " -Wno-implicit-int-conversion")
+#string(APPEND _W3 " -Wno-shorten-64-to-32")
+string(APPEND _W3 " -Wno-float-equal")
+string(APPEND _W3 " -Wno-switch-enum")
+string(APPEND _W3 " -Wno-deprecated-literal-operator")
+string(APPEND _W3 " -Wno-covered-switch-default")
+string(APPEND _W3 " -Wno-format-nonliteral")
+string(APPEND _W3 " -Wno-strict-prototypes")
+string(APPEND _W3 " -Wno-static-in-inline")
+string(APPEND _W3 " -Wno-deprecated-copy-with-user-provided-dtor")
+string(APPEND _W3 " -Wno-unused-exception-parameter")
+string(APPEND _W3 " -Wno-absolute-value")
+string(APPEND _W3 " -Wno-bad-function-cast")
+string(APPEND _W3 " -Wunused-function")
+string(APPEND _W3 " -Wno-switch-default")
+endif()
 
 if(DRIVER)
   # specifies the __stdcall calling convention for all functions except C++ member functions
