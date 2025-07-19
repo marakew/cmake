@@ -73,7 +73,7 @@ if(NOT DEFINED ENV{CLANG_VER})
 	if(CLANG_VER)
 		set(ENV{CLANG_VER} ${CLANG_VER})
 	else(NOT CLANG_VER)
-		set(CLANG_VER "18.x.x")
+		set(CLANG_VER "21.x.x")
 		set(ENV{CLANG_VER} ${CLANG_VER})
 	endif()
 else()
@@ -168,19 +168,36 @@ endif()
 if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang-cl.exe")
+
+  set(CMAKE_ASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-ml.exe")
+
+  set(CMAKE_LINKER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/lld-link.exe")
+
+  set(CMAKE_RC_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-rc.exe")
+  set(CMAKE_MT "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-mt.exe")
 elseif(USE_CLANG)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/clang++.exe")
+
+  set(CMAKE_ASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-ml.exe")
+
+  set(CMAKE_LINKER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/lld-link.exe")
+
+  set(CMAKE_RC_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-rc.exe")
+  set(CMAKE_MT "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/bin/llvm-mt.exe")
 else()
   set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x86/cl.exe")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x86/cl.exe")
-endif()
+
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x86/ml.exe")
   set(CMAKE_ASM_MASM_COMPILER "${VCPATH}/bin/Hostx64/x86/ml.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x86/link.exe")
 
   set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${WINSDK_VER}/x86/rc.exe")
   set(CMAKE_MT "${SDKPATH}/bin/${WINSDK_VER}/x86/mt.exe")
+endif()
 
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 
@@ -196,19 +213,38 @@ endif()
 if(USE_CLANGCL)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang-cl.exe")
+
+  set(CMAKE_ASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_FLAGS "-m64")
+
+  set(CMAKE_LINKER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/lld-link.exe")
+
+  set(CMAKE_RC_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-rc.exe")
+  set(CMAKE_MT "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-mt.exe")
 elseif(USE_CLANG)
   set(CMAKE_C_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang.exe")
   set(CMAKE_CXX_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/clang++.exe")
+
+  set(CMAKE_ASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-ml.exe")
+  set(CMAKE_ASM_MASM_FLAGS "-m64")
+
+  set(CMAKE_LINKER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/lld-link.exe")
+
+  set(CMAKE_RC_COMPILER "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-rc.exe")
+  set(CMAKE_MT "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/bin/llvm-mt.exe")
 else()
   set(CMAKE_C_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
   set(CMAKE_CXX_COMPILER "${VCPATH}/bin/Hostx64/x64/cl.exe")
-endif()
+
   set(CMAKE_ASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_ASM_MASM_COMPILER "${VCPATH}/bin/Hostx64/x64/ml64.exe")
   set(CMAKE_LINKER "${VCPATH}/bin/Hostx64/x64/link.exe")
 
   set(CMAKE_RC_COMPILER "${SDKPATH}/bin/${WINSDK_VER}/x64/rc.exe")
   set(CMAKE_MT "${SDKPATH}/bin/${WINSDK_VER}/x64/mt.exe")
+endif()
 
 else()
   message(FATAL_ERROR "You can not do -DPLATFORM=${PLATFORM} at all, CMake will exit.")
@@ -221,6 +257,17 @@ if(DRIVER)
     "${SDKPATH}/Include/${WINSDK_VER}/km;"
   )
 else()
+if(USE_CLANG) # TODO version clang 21
+if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
+  include_directories(SYSTEM
+    "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/lib/clang/21/include"
+  )
+elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
+  include_directories(SYSTEM
+    "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/lib/clang/21/include"
+  )
+endif()
+endif()
   include_directories(SYSTEM
     "${VCPATH}/include;"
     "${VCPATH}/atlmfc/include;"
@@ -279,8 +326,12 @@ elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
 #  set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES ${CMAKE_C_IMPLICIT_LINK_DIRECTORIES} CACHE STRING "" FORCE)
 endif()
 
+#set(CMAKE_MSVC_RUNTIME_LIBRARY "")
+
 if(USE_CLANG)
-  return()
+  set(CMAKE_C_FLAGS "-DWIN32 -D_WINDOWS")
+  set(CMAKE_CXX_FLAGS "-DWIN32 -D_WINDOWS")
+  return() #TODO
 endif()
 
 if(DRIVER)
@@ -309,8 +360,16 @@ endif()
 #set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -gline-tables-only -O2 -fno-inline ${_FLAGS_CXX}" CACHE STRING "" FORCE)
 #set(CMAKE_CXX_FLAGS_MINSIZEREL "${_FLAGS_CXX}" CACHE STRING "" FORCE)
 
+set(PLATFORM_COMPAT)
+
+if(USE_CLANG)
+set(_FLAGS_DEBUG " -g -Xclang -gcodeview")
+endif()
+
+if(NOT USE_CLANG)
 set(_FLAGS_DEBUG "/Zi")
 #set(_FLAGS_DEBUG "/Z7")
+
 set(_GR "/GR-") # RTTI - disable
 set(_GS "/GS-") # Buffer Security Check - disable
 #set(_FLAGS_ARCH "/arch:IA32")
@@ -323,7 +382,10 @@ set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
 #set(_W3 " /W3")
 set(_W3 "")
+
 string(APPEND _W3 " /W4") # Baseline reasonable warnings
+endif()
+
 if(NOT USE_CLANGCL)
 string(APPEND _W3 " /w14242") # 'identifier': conversion from 'type1' to 'type1', possible loss of data
 string(APPEND _W3 " /w14254") # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
@@ -347,7 +409,9 @@ string(APPEND _W3 " /w14905") # wide string literal cast to 'LPSTR'
 string(APPEND _W3 " /w14906") # string literal cast to 'LPWSTR'
 string(APPEND _W3 " /w14928") # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
 endif()
+
 string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
+
 if(USE_CLANG OR USE_CLANGCL)
 string(APPEND _W3 " -Wall")
 string(APPEND _W3 " -Wextra") # reasonable and standard
@@ -433,6 +497,8 @@ string(APPEND _W3 " -Wno-tautological-type-limit-compare")
 string(APPEND _W3 " -Wno-implicit-int-conversion")
 string(APPEND _W3 " -Wno-invalid-utf8")
 string(APPEND _W3 " -Wno-unused-template")
+string(APPEND _W3 " -Wno-padded")
+string(APPEND _W3 " -Wno-unique-object-duplication")
 endif()
 
 if(DRIVER)
@@ -441,10 +507,26 @@ if(DRIVER)
   string(APPEND _FLAGS_C " /Gz /KERNEL") #/Zc:threadSafeInit- 
 endif()
 
-set(PLATFORM_COMPAT)
+#Modules\Platform\Windows-Clang.cmake
+if(USE_CLANG)
+set(CMAKE_C_FLAGS "-DWIN32 -D_WINDOWS${PLATFORM_COMPAT}${_W3}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_DEBUG "${_FLAGS_DEBUG} -O0 ${_FLAGS_C}" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELEASE "-O3 ${_FLAGS_C} -DNDEBUG" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -O2 ${_FLAGS_C} -DNDEBUG" CACHE STRING "" FORCE)
+set(CMAKE_C_FLAGS_MINSIZEREL "-Os ${_FLAGS_C} -DNDEBUG" CACHE STRING "" FORCE)
+
+set(CMAKE_CXX_FLAGS "-DWIN32 -D_WINDOWS${PLATFORM_COMPAT}${_W3}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_DEBUG "${_FLAGS_DEBUG} -O0 ${_FLAGS_CXX}" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELEASE "-O3 ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -O2 ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
+endif()
+
+#Modules\Platform\Windows-MSVC.cmake
 if(USE_CLANGCL)
 string(APPEND PLATFORM_COMPAT " -fms-extensions -fms-compatibility")
 endif()
+
 set(CMAKE_C_FLAGS "/DWIN32 /D_WINDOWS${PLATFORM_COMPAT}${_W3}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_DEBUG "${_FLAGS_DEBUG} /Ob0 /Od ${_FLAGS_C}" CACHE STRING "" FORCE)
 set(CMAKE_C_FLAGS_RELEASE "/O2 /Ob2 ${_FLAGS_C} /DNDEBUG" CACHE STRING "" FORCE)
@@ -457,7 +539,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "/O2 /Ob2 ${_FLAGS_CXX} /DNDEBUG" CACHE STRING "" FO
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} /O2 /Ob1 ${_FLAGS_CXX} /DNDEBUG" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_MINSIZEREL "/O1 /Ob1 ${_FLAGS_CXX} /DNDEBUG" CACHE STRING "" FORCE)
 
-set(CMAKE_MSVC_RUNTIME_LIBRARY "")
+set(CMAKE_MSVC_RUNTIME_LIBRARY "") #up
 
 if(DRIVER)
 #  set(CMAKE_C_CREATE_CONSOLE_EXE "/DRIVER /ENTRY:\"DriverEntry\" /SUBSYSTEM:CONSOLE /NODEFAULTLIB" CACHE STRING "" FORCE)
