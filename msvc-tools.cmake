@@ -259,23 +259,43 @@ if(DRIVER)
 else()
 if(USE_CLANG) # TODO version clang 21
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
-  include_directories(SYSTEM
-    "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/lib/clang/21/include"
-  )
+#  include_directories(SYSTEM
+#    "${CLANG_PATH}/LLVM-${CLANG_VER}-win32/lib/clang/21/include"
+#  )
+   foreach(lang C CXX)
+	list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES
+		"${CLANG_PATH}/LLVM-${CLANG_VER}-win32/lib/clang/21/include"
+	)
+   endforeach()
 elseif(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x64")
-  include_directories(SYSTEM
-    "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/lib/clang/21/include"
-  )
+#  include_directories(SYSTEM
+#    "${CLANG_PATH}/LLVM-${CLANG_VER}-win64/lib/clang/21/include"
+#  )
+   foreach(lang C CXX)
+	list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES
+		"${CLANG_PATH}/LLVM-${CLANG_VER}-win64/lib/clang/21/include"
+	)
+   endforeach()
 endif()
 endif()
-  include_directories(SYSTEM
-    "${VCPATH}/include;"
-    "${VCPATH}/atlmfc/include;"
-    "${SDKPATH}/Include/${WINSDK_VER}/ucrt;"
-    "${SDKPATH}/Include/${WINSDK_VER}/shared;"
-    "${SDKPATH}/Include/${WINSDK_VER}/um;"
-    "${SDKPATH}/Include/${WINSDK_VER}/winrt;"
-  )
+#  include_directories(SYSTEM
+#    "${VCPATH}/include;"
+#    "${VCPATH}/atlmfc/include;"
+#    "${SDKPATH}/Include/${WINSDK_VER}/ucrt;"
+#    "${SDKPATH}/Include/${WINSDK_VER}/shared;"
+#    "${SDKPATH}/Include/${WINSDK_VER}/um;"
+#    "${SDKPATH}/Include/${WINSDK_VER}/winrt;"
+#  )
+   foreach(lang C CXX)
+	list(APPEND CMAKE_${lang}_STANDARD_INCLUDE_DIRECTORIES
+		"${VCPATH}/include;"
+		"${VCPATH}/atlmfc/include;"
+		"${SDKPATH}/Include/${WINSDK_VER}/ucrt;"
+		"${SDKPATH}/Include/${WINSDK_VER}/shared;"
+		"${SDKPATH}/Include/${WINSDK_VER}/um;"
+		"${SDKPATH}/Include/${WINSDK_VER}/winrt;"
+	)
+   endforeach()
 endif()
 
 if(DEFINED ENV{PLATFORM} AND $ENV{PLATFORM} STREQUAL "x32")
