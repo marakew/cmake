@@ -517,8 +517,12 @@ string(APPEND _W3 " -Wno-tautological-type-limit-compare")
 string(APPEND _W3 " -Wno-implicit-int-conversion")
 string(APPEND _W3 " -Wno-invalid-utf8")
 string(APPEND _W3 " -Wno-unused-template")
+string(APPEND _W3 " -Wno-deprecated-declarations")
+string(APPEND _W3 " -Wno-nrvo")
+string(APPEND _W3 " -Wno-ms-bitfield-padding")
 string(APPEND _W3 " -Wno-padded")
 string(APPEND _W3 " -Wno-unique-object-duplication")
+string(APPEND _W3 " -Wno-implicit-void-ptr-cast") #C++
 endif()
 
 if(DRIVER)
