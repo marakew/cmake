@@ -348,11 +348,23 @@ endif()
 
 #set(CMAKE_MSVC_RUNTIME_LIBRARY "")
 
+#if(USE_CLANG)
+#  set(CMAKE_C_FLAGS "-DWIN32 -D_WINDOWS")
+#  set(CMAKE_CXX_FLAGS "-DWIN32 -D_WINDOWS")
+#  return() #TODO
+#endif()
+
 if(USE_CLANG)
-  set(CMAKE_C_FLAGS "-DWIN32 -D_WINDOWS")
-  set(CMAKE_CXX_FLAGS "-DWIN32 -D_WINDOWS")
-  return() #TODO
+
+if(DRIVER)
+  set(CMAKE_C_STANDARD_LIBRARIES "-llibcntpr -lntstrsafe -lBufferOverflowK -lntoskrnl -lhal -lwdm" CACHE STRING "" FORCE)
+  set(CMAKE_CXX_STANDARD_LIBRARIES "-llibcntpr -lntstrsafe -lBufferOverflowK -lntoskrnl -lhal -lwdm" CACHE STRING "" FORCE)
+else()
+  set(CMAKE_C_STANDARD_LIBRARIES "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -lws2_32 -loldnames" CACHE STRING "" FORCE)
+  set(CMAKE_CXX_STANDARD_LIBRARIES "-lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 -lws2_32 -loldnames" CACHE STRING "" FORCE)
 endif()
+
+else()
 
 if(DRIVER)
   set(CMAKE_C_STANDARD_LIBRARIES "libcntpr.lib ntstrsafe.lib BufferOverflowK.lib ntoskrnl.lib hal.lib wdm.lib" CACHE STRING "" FORCE)
@@ -360,6 +372,8 @@ if(DRIVER)
 else()
   set(CMAKE_C_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ws2_32.lib" CACHE STRING "" FORCE)
   set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib ws2_32.lib" CACHE STRING "" FORCE)
+endif()
+
 endif()
 
 # clang-cl
@@ -381,6 +395,7 @@ endif()
 #set(CMAKE_CXX_FLAGS_MINSIZEREL "${_FLAGS_CXX}" CACHE STRING "" FORCE)
 
 set(PLATFORM_COMPAT)
+set(_W3 "")
 
 if(USE_CLANG)
 set(_FLAGS_DEBUG " -g -Xclang -gcodeview")
@@ -401,12 +416,12 @@ set(_GS "/GS-") # Buffer Security Check - disable
 set(_FLAGS_CXX "${_GR} /EHsc")
 set(_FLAGS_C "")
 #set(_W3 " /W3")
-set(_W3 "")
+#set(_W3 "")
 
 string(APPEND _W3 " /W4") # Baseline reasonable warnings
 endif()
 
-if(NOT USE_CLANGCL)
+if(NOT USE_CLANGCL AND NOT USE_CLANG)
 string(APPEND _W3 " /w14242") # 'identifier': conversion from 'type1' to 'type1', possible loss of data
 string(APPEND _W3 " /w14254") # 'operator': conversion from 'type1:field_bits' to 'type2:field_bits', possible loss of data
 string(APPEND _W3 " /w14263") # 'function': member function does not override any base class virtual member function
@@ -430,7 +445,9 @@ string(APPEND _W3 " /w14906") # string literal cast to 'LPWSTR'
 string(APPEND _W3 " /w14928") # illegal copy-initialization; more than one user-defined conversion has been implicitly applied
 endif()
 
+if(NOT USE_CLANG)
 string(APPEND _W3 " /permissive-") # standards conformance mode for MSVC compiler.
+endif()
 
 if(USE_CLANG OR USE_CLANGCL)
 string(APPEND _W3 " -Wall")
@@ -544,6 +561,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "${_FLAGS_DEBUG} -O0 ${_FLAGS_CXX}" CACHE STRING "" FO
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${_FLAGS_DEBUG} -O2 ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os ${_FLAGS_CXX} -DNDEBUG" CACHE STRING "" FORCE)
+
+return()
 endif()
 
 #Modules\Platform\Windows-MSVC.cmake
