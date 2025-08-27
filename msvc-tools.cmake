@@ -540,6 +540,7 @@ string(APPEND _W3 " -Wno-ms-bitfield-padding")
 string(APPEND _W3 " -Wno-padded")
 string(APPEND _W3 " -Wno-unique-object-duplication")
 string(APPEND _W3 " -Wno-implicit-void-ptr-cast") #C++
+string(APPEND _W3 " -Wno-c++-keyword")
 endif()
 
 if(DRIVER)
